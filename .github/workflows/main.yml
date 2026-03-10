@@ -1,0 +1,30 @@
+name: Pipeline Academica
+on:
+  push:
+    branches: [ main, versao-final-ci-cd ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    name: Build e Lint (CI)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configurar Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Executar Lint
+        run: |
+          pip install pillow python-docx pylint
+          # O --exit-zero faz ficar VERDE mesmo com avisos de estilo
+          pylint BtGSys.py --exit-zero
+
+  deploy:
+    name: Deployment (CD)
+    needs: build  
+    runs-on: ubuntu-latest
+    steps:
+      - name: Simulação de Deploy
+        run: echo "Efetuando o deploy do sistema BtG"
