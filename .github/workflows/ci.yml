@@ -1,0 +1,26 @@
+name: Continuous Integration
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker Image
+        run: |
+          docker build -t btgsys-app:test .
+      
+      - name: Verify Environment
+        run: |
+          # Verifica se as bibliotecas principais carregam sem erros de importação
+          docker run --rm btgsys-app:test python -c "import tkinter; import PIL; import docx; print('Ambiente validado com sucesso!')"

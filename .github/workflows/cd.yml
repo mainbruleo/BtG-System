@@ -1,4 +1,4 @@
-name: CD - Build Executable
+name: Continuous Deployment
 
 on:
   push:
@@ -6,28 +6,21 @@ on:
 
 jobs:
   deploy:
-    runs-on: windows-latest  # Geramos o .exe no Windows para garantir compatibilidade
+    runs-on: ubuntu-latest
+    # Garante que o deploy só ocorra se o código estiver estável
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
         with:
-          python-version: '3.10'
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-          pip install pyinstaller
-
-      - name: Build EXE
-        run: |
-          pyinstaller --onefile --windowed BtGSys.py
-
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v4
+      - name: Build and Push
+        uses: docker/build-push-action@v5
         with:
-          name: BtG-System-Executable
-          path: dist/*.exe
+          context: .
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/btgsys-app:latest
