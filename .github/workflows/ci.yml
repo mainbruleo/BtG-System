@@ -37,4 +37,4 @@ jobs:
           webhook_url: ${{ secrets.DISCORD_WEBHOOK }}
           webhook: ${{ secrets.DISCORD_WEBHOOK }}
           template: "avatar-with-link"
-          include-extras: true
+          include-extras: true 
