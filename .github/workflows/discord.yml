@@ -1,16 +1,23 @@
-name: Discord
+name: Discord Notifications
+
 on:
-  - push
+  push:
+    branches:
+      - '**' 
+  delete:   
+  pull_request:
+    types: [opened, reopened] 
 
 jobs:
   discord:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - name: Run Discord Webhook
         uses: Sniddl/discord-commits@v1.8
         with:
           webhook_url: ${{ secrets.DISCORD_WEBHOOK }}
           webhook: ${{ secrets.DISCORD_WEBHOOK }}
           template: "avatar-with-link"
-          include-extras: true 
+          include-extras: true
