@@ -30,8 +30,9 @@ class TestBtGSys(unittest.TestCase):
         self.assertEqual(sucesso, 1)
 
     def test_path_configuration(self):
-        caminho_src = os.path.exists(os.path.join('..', 'src', 'BtGSys.py'))
-        self.assertTrue(caminho_src)
+        base_path = os.path.dirname(__file__)
+        caminho_src = os.path.abspath(os.path.join(base_path, '..', 'src', 'BtGSys.py'))
+        self.assertTrue(os.path.exists(caminho_src), f"Caminho não encontrado: {caminho_src}")
 
     def test_branding_constants(self):
         from BtGSys import ESTILO_FONTE
