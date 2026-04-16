@@ -1,16 +1,24 @@
-name: Discord
+name: Discord Notifications
+
 on:
-  - push
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
 
 jobs:
   discord:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Run Discord Webhook
-        uses: Sniddl/discord-commits@v1.8
         with:
-          webhook_url: ${{ secrets.DISCORD_WEBHOOK }}
-          webhook: ${{ secrets.DISCORD_WEBHOOK }}
-          template: "avatar-with-link"
-          include-extras: true 
+          fetch-depth: 0
+
+      - name: Discord notification
+        uses: rjstone/discord-webhook-notify@v1
+        if: always() 
+        with:
+          severity: info
+          details: "Novo push detectado no sistema BtG!"
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+          avatarUrl: "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
