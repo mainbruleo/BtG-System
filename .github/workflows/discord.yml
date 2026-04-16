@@ -18,5 +18,5 @@ jobs:
         uses: Sniddl/discord-commits@v1.8
         with:
           webhook: ${{ secrets.DISCORD_WEBHOOK }}
-          template: "avatar-with-link"
-          include-extras: true
+          template: "compact"
+          include-extras: false
