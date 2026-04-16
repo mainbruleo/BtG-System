@@ -2,11 +2,9 @@ name: Discord Notifications
 
 on:
   push:
-    branches:
-      - '**' 
-  delete:   
+    branches: ["main"]
   pull_request:
-    types: [opened, reopened] 
+    branches: ["main"]
 
 jobs:
   discord:
@@ -16,7 +14,11 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Run Discord Webhook
-        uses: Sniddl/discord-commits@v1.8
+      - name: Discord notification
+        uses: rjstone/discord-webhook-notify@v1
+        if: always() 
         with:
-          webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          severity: info
+          details: "Novo push detectado no sistema BtG!"
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+          avatarUrl: "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
